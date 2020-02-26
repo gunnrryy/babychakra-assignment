@@ -21,6 +21,8 @@ Replace/Remove password in $components['redis'] depending upon your Redis setup
 Data Dependencies
 --------------
 Kept all the json data files under `data` directory
+
+
 Endpoints
 --------------
 For populating data
@@ -36,49 +38,49 @@ For searching data
 
 Nginx Config
 ---------------------
-server {
-	listen   80;
-	root /var/www/babychakra/web;
-	server_name babychakra.test;
+    server {
+        listen   80;
+        root /var/www/babychakra/web;
+        server_name babychakra.test;
 
-	add_header Pragma public;
-	add_header Cache-Control "public, must-revalidate, proxy-revalidate";
-	
-	client_header_buffer_size 32k;
-	large_client_header_buffers 32 64K;
-	client_max_body_size 5M;
-	
-	error_log /var/log/nginx/babychakra-error.log;
-	access_log /var/log/nginx/babychakra-access.log;
-	
-	index index.php;
-	location ~* \.(js|css|png|jpg|jpeg|gif|ico|woff|woff2|ttf)$ {
-		expires 24h;
-        log_not_found off;
-	}
-	
-	location / {
-		try_files $uri $uri/ /index.php?$args;
-	}
-	location /favicon {
-		empty_gif;
-	}
-	location /downloads {
-		try_files $uri $uri/ /api/index.php?$args;
-	}
-	location /api {
-		try_files $uri $uri/ /api/index.php?$args;
-	}
-	error_page 500 502 503 504 /50x.html;
-		location = /50x.html {
-		root /usr/share/nginx/www;
-	}
-	location ~ \.php$ {
-	   include fastcgi_params;
-           fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-           #fastcgi_pass unix:/var/run/php5-fpm.sock;
-           try_files $uri =404;
-	}
-}
+        add_header Pragma public;
+        add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+        
+        client_header_buffer_size 32k;
+        large_client_header_buffers 32 64K;
+        client_max_body_size 5M;
+        
+        error_log /var/log/nginx/babychakra-error.log;
+        access_log /var/log/nginx/babychakra-access.log;
+        
+        index index.php;
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|woff|woff2|ttf)$ {
+            expires 24h;
+            log_not_found off;
+        }
+        
+        location / {
+            try_files $uri $uri/ /index.php?$args;
+        }
+        location /favicon {
+            empty_gif;
+        }
+        location /downloads {
+            try_files $uri $uri/ /api/index.php?$args;
+        }
+        location /api {
+            try_files $uri $uri/ /api/index.php?$args;
+        }
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+            root /usr/share/nginx/www;
+        }
+        location ~ \.php$ {
+        include fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            #fastcgi_pass unix:/var/run/php5-fpm.sock;
+            try_files $uri =404;
+        }
+    }
 
 
